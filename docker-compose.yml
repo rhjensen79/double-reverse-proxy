@@ -1,5 +1,14 @@
 version: '3'
 services:
+  cloudflared:
+    image: cloudflare/cloudflared
+    container_name: cloudflared
+    networks:
+      - caddy
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    command: tunnel run
+    restart: unless-stopped
   caddy:
     image: caddy:latest
     container_name: caddy
@@ -12,24 +21,20 @@ services:
       - ./caddy:/config
       - /etc/localtime:/etc/localtime:ro
     entrypoint: /usr/bin/caddy run --adapter caddyfile --config /config/Caddyfile
+    depends_on:
+      - cloudflared
   nginx:
     image: nginx
     networks:
+      - caddy
+    depends_on:
       - caddy
   httpd:
     image: httpd
     networks:
       - caddy
-  cloudflared:
-    image: cloudflare/cloudflared
-    container_name: cloudflared
-    networks:
+    depends_on:
       - caddy
-    environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
-    command: tunnel run
-    restart: unless-stopped
-
 networks:
   caddy:
 
