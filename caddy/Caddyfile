@@ -1,0 +1,15 @@
+https://caddy {
+	tls internal
+	
+	handle_path /httpd* {
+		rewrite * /
+		reverse_proxy http://httpd:80
+	}
+
+	handle_path /nginx* {
+		rewrite * /
+		reverse_proxy http://nginx:80
+	}
+	
+	reverse_proxy * http://nginx:80
+}
