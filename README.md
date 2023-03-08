@@ -1,4 +1,4 @@
-# Example Repository for Blog post Double reverse proxy
+# Example Repository for Blog post [Double reverse proxy](https://www.robert-jensen.dk/posts/2023-double-reverse-proxy/)
 
 To use this repo do the following.
 
